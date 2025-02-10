@@ -16,10 +16,13 @@ public class AutoOZPark extends LinearOpMode {
 
     // JUST WORK ALREADY
     // YAY you work
-    Robot robot = new Robot(hardwareMap, telemetry);
     @Override
     public void runOpMode() {
+
         // Put initialization blocks here.
+
+        Robot robot = new Robot(hardwareMap, telemetry);
+
         waitForStart();
         if (opModeIsActive()) {
             while (opModeIsActive()) {

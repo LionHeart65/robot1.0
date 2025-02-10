@@ -6,18 +6,26 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Robot {
-    public DcMotor frontLeft;
-    public DcMotor backLeft;
-    public DcMotor frontRight;
-    public DcMotor backRight;
+    public final DcMotor frontLeft;
+    public final DcMotor backLeft;
+    public final DcMotor frontRight;
+    public final DcMotor backRight;
     private final Telemetry telemetry;
 
     public Robot(HardwareMap hardwareMap, Telemetry tele) {
-        frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
-        backLeft = hardwareMap.get(DcMotor.class, "backLeft");
-        frontRight = hardwareMap.get(DcMotor.class, "frontRight");
-        backRight = hardwareMap.get(DcMotor.class, "backRight");
         telemetry = tele;
+        if (hardwareMap == null) {
+            telemetry.addLine("oi");
+        }
+        telemetry.addLine("Starting");
+        frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
+        telemetry.addLine("Frontleft");
+        backLeft = hardwareMap.get(DcMotor.class, "backLeft");
+        telemetry.addLine("backLeft");
+        frontRight = hardwareMap.get(DcMotor.class, "frontRight");
+        telemetry.addLine("frontRight");
+        backRight = hardwareMap.get(DcMotor.class, "backRight");
+        telemetry.addLine("backRight");
     }
 
     public void setMotors(double frontLeft, double backLeft, double frontRight, double backRight) {
@@ -33,7 +41,12 @@ public class Robot {
     }
 
     public void tankDrive(double leftPower, double rightPower) {
-        rightPower *= -1;
-        this.setMotors(leftPower, leftPower, rightPower, rightPower);
+//        rightPower *= -1;
+        telemetry.addData("LeftPower", leftPower);
+        telemetry.addData("RightPower", rightPower);
+        telemetry.addData("NegRightPower", -rightPower);
+
+
+        this.setMotors(-leftPower, -leftPower, rightPower, rightPower);
     }
 }
