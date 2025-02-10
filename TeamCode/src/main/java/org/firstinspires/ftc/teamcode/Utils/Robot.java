@@ -40,13 +40,15 @@ public class Robot {
         telemetry.update();
     }
 
-    public void tankDrive(double leftPower, double rightPower) {
+    public void tankDrive(double power, double turn) {
 //        rightPower *= -1;
-        telemetry.addData("LeftPower", leftPower);
-        telemetry.addData("RightPower", rightPower);
-        telemetry.addData("NegRightPower", -rightPower);
+        telemetry.addData("Power: ", power);
+        telemetry.addData("Turn: ", turn);
 
 
-        this.setMotors(-leftPower, -leftPower, rightPower, rightPower);
+        this.setMotors(power, power, -power, -power);
+        this.setMotors(turn, turn, -turn, -turn);
+
+
     }
 }

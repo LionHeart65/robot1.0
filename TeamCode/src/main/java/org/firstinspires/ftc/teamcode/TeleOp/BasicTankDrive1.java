@@ -23,10 +23,10 @@ public class BasicTankDrive1 extends LinearOpMode{
         if (opModeIsActive()) {
             while (opModeIsActive()) {
                 // Put loop blocks here
-                telemetry.addData("Left stick", gamepad1.left_stick_y);
-                telemetry.addData("Right stick", gamepad1.right_stick_y);
+                telemetry.addData("Left stick", gamepad1.right_stick_y);
+                telemetry.addData("Right stick", gamepad1.left_stick_y);
 
-                robot.tankDrive(gamepad1.left_stick_y, gamepad1.right_stick_y);
+                robot.tankDrive(gamepad1.right_stick_y, gamepad1.left_stick_y);
                 telemetry.addLine("wefewfew");
 
             }
