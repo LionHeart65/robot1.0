@@ -45,9 +45,9 @@ public class MecanumDemo extends LinearOpMode {
 
         waitForStart();
         while (opModeIsActive()){
-            double px = gamepad1.left_stick_x;
-            double py = -gamepad1.left_stick_y;
-            double pa = gamepad1.left_trigger - gamepad1.right_trigger;
+            double px = -gamepad1.right_stick_x;
+            double py = gamepad1.right_stick_y;
+            double pa = -gamepad1.left_stick_x;
 
             if (Math.abs(pa) < 0.05) pa = 0;
             double p1 = -px + py - pa;

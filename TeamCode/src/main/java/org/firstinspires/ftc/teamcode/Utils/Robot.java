@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.Utils;
 
-
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -41,14 +40,11 @@ public class Robot {
     }
 
     public void tankDrive(double power, double turn) {
-//        rightPower *= -1;
         telemetry.addData("Power: ", power);
         telemetry.addData("Turn: ", turn);
 
-
-        this.setMotors(power, power, -power, -power);
-        this.setMotors(turn, turn, -turn, -turn);
-
+        this.setMotors(-power, -power, power, power);
+        this.setMotors(turn, turn, turn, turn);
 
     }
 }
