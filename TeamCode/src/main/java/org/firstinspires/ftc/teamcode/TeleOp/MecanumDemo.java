@@ -4,89 +4,57 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.*;
 
-/**
- * Example OpMode. Demonstrates use of gyro, color sensor, encoders, and telemetry.
- *
- */
+
 @TeleOp(name = "mecanum bot demo", group = "Teleop")
 public class MecanumDemo extends LinearOpMode {
 
-    public void runOpMode(){
-        DcMotor m1 = hardwareMap.dcMotor.get("backLeft");
-        DcMotor m2 = hardwareMap.dcMotor.get("frontLeft");
-        DcMotor m3 = hardwareMap.dcMotor.get("frontRight");
-        DcMotor m4 = hardwareMap.dcMotor.get("backRight");
-        m1.setDirection(DcMotor.Direction.REVERSE);
-        m2.setDirection(DcMotor.Direction.REVERSE);
-        m1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        m2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        m3.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        m4.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        m1.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        m2.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        m3.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        m4.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    DcMotor backLeft;
+    DcMotor frontLeft;
+    DcMotor frontRight;
+    DcMotor backRight;
 
-        //DistanceSensor frontDistance = hardwareMap.get(DistanceSensor.class, "front_distance");
-        //DistanceSensor leftDistance = hardwareMap.get(DistanceSensor.class, "left_distance");
-        //DistanceSensor rightDistance = hardwareMap.get(DistanceSensor.class, "right_distance");
-        //DistanceSensor backDistance = hardwareMap.get(DistanceSensor.class, "back_distance");
+    public void moveY(int power, int direction) {
+        backLeft.setPower(power * direction);
+        backLeft.setPower(power * direction);
+        backLeft.setPower(power * direction);
+        backLeft.setPower(power * direction);
+    }
 
-        //IMU imu = hardwareMap.get(IMU.class, "imu");
+    public void moveX(int power, int direction) {
+        backLeft.setPower(power * direction);
+        backLeft.setPower(power * direction);
+        backLeft.setPower(power * direction);
+        backLeft.setPower(power * direction);
+    }
 
-        //ColorSensor colorSensor = hardwareMap.colorSensor.get("color_sensor");
+    public void initialize() {
+        backLeft = hardwareMap.dcMotor.get("backLeft");
+        frontLeft = hardwareMap.dcMotor.get("frontLeft");
+        frontRight = hardwareMap.dcMotor.get("frontRight");
+        backRight = hardwareMap.dcMotor.get("backRight");
 
-        //SparkFunOTOS myOTOS = hardwareMap.get(SparkFunOTOS.class, "sensor_otos");
+        backLeft.setDirection(DcMotor.Direction.REVERSE);
+        frontLeft.setDirection(DcMotor.Direction.REVERSE);
 
-        //OctoQuad octoQuad = hardwareMap.get(OctoQuad.class, "octoquad");
+        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         telemetry.addData("Press Start When Ready","");
         telemetry.update();
+    }
+    public void runOpMode(){
+        initialize();
 
         waitForStart();
-        while (opModeIsActive()){
-            double px = -gamepad1.right_stick_x;
-            double py = gamepad1.right_stick_y;
-            double pa = -gamepad1.left_stick_x;
+        while (opModeIsActive()) {
 
-            if (Math.abs(pa) < 0.05) pa = 0;
-            double p1 = -px + py - pa;
-            double p2 = px + py - pa;
-            double p3 = -px + py + pa;
-            double p4 = px + py + pa;
-            double max = Math.max(1.0, Math.abs(p1));
-            max = Math.max(max, Math.abs(p2));
-            max = Math.max(max, Math.abs(p3));
-            max = Math.max(max, Math.abs(p4));
-            p1 /= max;
-            p2 /= max;
-            p3 /= max;
-            p4 /= max;
-            m1.setPower(p1);
-            m2.setPower(p2);
-            m3.setPower(p3);
-            m4.setPower(p4);
-//            telemetry.addData("Color","R %d  G %d  B %d", colorSensor.red(), colorSensor.green(), colorSensor.blue());
-//            Orientation orientation = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS);
-//            Orientation orientation = imu.getRobotOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.RADIANS);
-//            telemetry.addData("Heading", " %.1f", orientation.firstAngle * 180.0 / Math.PI);
-//            telemetry.addData("Angular Velocity", "%.1f", imu.getRobotAngularVelocity(AngleUnit.DEGREES).zRotationRate);
-//            telemetry.addData("Front Distance", " %.1f", frontDistance.getDistance(DistanceUnit.CM));
-//            telemetry.addData("Left Distance", " %.1f", leftDistance.getDistance(DistanceUnit.CM));
-//            telemetry.addData("Right Distance", " %.1f", rightDistance.getDistance(DistanceUnit.CM));
-//            telemetry.addData("Back Distance", " %.1f", backDistance.getDistance(DistanceUnit.CM));
-//            telemetry.addData("Encoders"," %d %d %d %d", m1.getCurrentPosition(), m2.getCurrentPosition(),
-//                    m3.getCurrentPosition(), m4.getCurrentPosition());
-//            telemetry.addData("Octoquad", "%d %d %d %d", octoQuad.readSinglePosition(0),
-//                    octoQuad.readSinglePosition(1), octoQuad.readSinglePosition(2),
-//                    octoQuad.readSinglePosition(3));
-//            SparkFunOTOS.Pose2D pose2D = myOTOS.getPosition();
-//            telemetry.addData("Pose", "x=%.1f  y=%.1f  h=%.1f", pose2D.x, pose2D.y, pose2D.h);
-//            telemetry.update();
         }
-        m1.setPower(0);
-        m2.setPower(0);
-        m3.setPower(0);
-        m4.setPower(0);
     }
 }
