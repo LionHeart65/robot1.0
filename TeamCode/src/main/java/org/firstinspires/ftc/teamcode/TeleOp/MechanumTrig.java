@@ -7,11 +7,12 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.Utils.SparkFunOdo;
 
 @TeleOp(name = "MechanumTrig", group = "TeleOp")
 public class MechanumTrig extends OpMode{
     DcMotor frontLeft, frontRight, backLeft, backRight;
-    SparkFunOTOS sensor;
+    SparkFunOdo sensor;
     public void init() {
         frontLeft = hardwareMap.dcMotor.get("frontLeft");
         backLeft = hardwareMap.dcMotor.get("backLeft");
@@ -19,13 +20,11 @@ public class MechanumTrig extends OpMode{
         backRight = hardwareMap.dcMotor.get("backRight");
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        sensor = hardwareMap.get(SparkFunOTOS.class, "sensor_otos");
-        sensor.setAngularUnit(AngleUnit.DEGREES);
-        sensor.calibrateImu();
+        sensor = new SparkFunOdo(hardwareMap, new SparkFunOTOS.Pose2D(0,0,0), new SparkFunOTOS.Pose2D(0,0,0));
     }
     public void loop() {
         double rotate = gamepad1.right_stick_x;
-        double realRobotHeading = sensor.getPosition().h;
+        double realRobotHeading = sensor.getPos().h;
         double yStick = -gamepad1.left_stick_y;
         double stickHeading = Math.atan2(yStick, gamepad1.left_stick_x);
         double stickHeadingDegree = Math.toDegrees(stickHeading);
