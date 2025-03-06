@@ -27,18 +27,18 @@ public class MechanumTrig extends OpMode{
         double rotate = gamepad1.right_stick_x;
         double realRobotHeading = sensor.getPosition().h;
         double yStick = -gamepad1.left_stick_y;
-        double heading = Math.atan2(yStick, gamepad1.left_stick_x);
-        double headingDegree = Math.toDegrees(heading);
-        telemetry.addData("heading", headingDegree - 90);
+        double stickHeading = Math.atan2(yStick, gamepad1.left_stick_x);
+        double stickHeadingDegree = Math.toDegrees(stickHeading);
+        telemetry.addData("heading", stickHeadingDegree - 90);
         telemetry.addData("robo heading", realRobotHeading);
-        double robotHeading = headingDegree - 45;
-        robotHeading -= realRobotHeading;
-        double robotHeadingRads = Math.toRadians(robotHeading);
+        double sendRobotHeading = stickHeadingDegree - 45;
+        sendRobotHeading -= realRobotHeading;
+        double sendRobotHeadingRads = Math.toRadians(sendRobotHeading);
         double speed = Math.hypot(yStick, gamepad1.left_stick_x);
-        double rightFrontPower = Math.sin(robotHeadingRads) * speed;
-        double leftBackPower = Math.sin(robotHeadingRads) * speed;
-        double leftFrontPower = Math.cos(robotHeadingRads) * speed;
-        double rightBackPower = Math.cos(robotHeadingRads) * speed;
+        double rightFrontPower = Math.sin(sendRobotHeadingRads) * speed;
+        double leftBackPower = Math.sin(sendRobotHeadingRads) * speed;
+        double leftFrontPower = Math.cos(sendRobotHeadingRads) * speed;
+        double rightBackPower = Math.cos(sendRobotHeadingRads) * speed;
 
         frontLeft.setPower(leftFrontPower + rotate);
         backLeft.setPower(leftBackPower + rotate);
