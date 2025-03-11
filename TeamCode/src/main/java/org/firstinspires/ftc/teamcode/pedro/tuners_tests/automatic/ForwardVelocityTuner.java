@@ -1,4 +1,4 @@
-package pedro.tuners_tests.automatic;
+package org.firstinspires.ftc.teamcode.pedro.tuners_tests.automatic;
 
 import static com.pedropathing.follower.FollowerConstants.leftFrontMotorName;
 import static com.pedropathing.follower.FollowerConstants.leftRearMotorName;
@@ -28,8 +28,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import pedro.constants.FConstants;
-import pedro.constants.LConstants;
+import org.firstinspires.ftc.teamcode.pedro.constants.FConstants;
+import org.firstinspires.ftc.teamcode.pedro.constants.LConstants;
 
 /**
  * This is the ForwardVelocityTuner autonomous follower OpMode. This runs the robot forwards at max
@@ -56,14 +56,10 @@ public class ForwardVelocityTuner extends OpMode {
     private DcMotorEx rightFront;
     private DcMotorEx rightRear;
     private List<DcMotorEx> motors;
-
     private PoseUpdater poseUpdater;
-
     public static double DISTANCE = 48;
     public static double RECORD_NUMBER = 10;
-
     private Telemetry telemetryA;
-
     private boolean end;
 
     /**
@@ -170,3 +166,4 @@ public class ForwardVelocityTuner extends OpMode {
         }
     }
 }
+

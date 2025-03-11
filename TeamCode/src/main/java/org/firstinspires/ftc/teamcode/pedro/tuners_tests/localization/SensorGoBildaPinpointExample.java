@@ -20,7 +20,7 @@
  *   SOFTWARE.
  */
 
-package pedro.tuners_tests.localization;
+package org.firstinspires.ftc.teamcode.pedro.tuners_tests.localization;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
