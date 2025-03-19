@@ -6,11 +6,10 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Utils.SparkFunOdo;
 
-@TeleOp(name = "MechanumTrig", group = "TeleOp")
-public class MechanumTrig extends OpMode{
+@TeleOp(name = "Mechanum Field Centric", group = "TeleOp")
+public class MechanumFieldCentric extends OpMode{
     DcMotor frontLeft, frontRight, backLeft, backRight;
     SparkFunOdo sensor;
     public void init() {
@@ -20,7 +19,7 @@ public class MechanumTrig extends OpMode{
         backRight = hardwareMap.dcMotor.get("backRight");
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-        sensor = new SparkFunOdo(hardwareMap, new SparkFunOTOS.Pose2D(0,0,0), new SparkFunOTOS.Pose2D(0,0,0));
+        sensor = new SparkFunOdo(hardwareMap, new SparkFunOTOS.Pose2D(165,0,0), new SparkFunOTOS.Pose2D(0,0,0));
     }
     public void loop() {
         double rotate = gamepad1.right_stick_x;

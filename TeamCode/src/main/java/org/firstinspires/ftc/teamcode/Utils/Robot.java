@@ -1,50 +1,32 @@
 package org.firstinspires.ftc.teamcode.Utils;
 
+import androidx.annotation.NonNull;
+
+import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Robot {
-    public final DcMotor frontLeft;
-    public final DcMotor backLeft;
-    public final DcMotor frontRight;
-    public final DcMotor backRight;
-    private final Telemetry telemetry;
+    public final DcMotor frontLeft, backLeft, frontRight, backRight;
+    public DcMotor intakeMotor;
 
-    public Robot(HardwareMap hardwareMap, Telemetry tele) {
-        telemetry = tele;
-        if (hardwareMap == null) {
-            telemetry.addLine("oi");
-        }
-        telemetry.addLine("Starting");
+    public final SparkFunOdo odo;
+
+    public Robot(@NonNull HardwareMap hardwareMap) {
+
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
-        telemetry.addLine("Frontleft");
         backLeft = hardwareMap.get(DcMotor.class, "backLeft");
-        telemetry.addLine("backLeft");
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
-        telemetry.addLine("frontRight");
         backRight = hardwareMap.get(DcMotor.class, "backRight");
-        telemetry.addLine("backRight");
-    }
 
-    public void setMotors(double frontLeft, double backLeft, double frontRight, double backRight) {
-        this.frontLeft.setPower(frontLeft);
-        this.backLeft.setPower(backLeft);
-        this.frontRight.setPower(frontRight);
-        this.backRight.setPower(backRight);
-        telemetry.addData("Front Left Power:", this.frontLeft.getPower());
-        telemetry.addData("Back Left Power", this.backLeft.getPower());
-        telemetry.addData("Front Right Power", this.frontRight.getPower());
-        telemetry.addData("Back Right Power", this.backRight.getPower());
-        telemetry.update();
-    }
+        frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
+        backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
-    public void tankDrive(double power, double turn) {
-        telemetry.addData("Power: ", power);
-        telemetry.addData("Turn: ", turn);
+        intakeMotor = hardwareMap.get(DcMotor.class, "intakeMotor");
 
-        this.setMotors(-power, -power, power, power);
-        this.setMotors(turn, turn, turn, turn);
+        odo = new SparkFunOdo(hardwareMap, new SparkFunOTOS.Pose2D(-6.49606,0,0), new SparkFunOTOS.Pose2D(0,0,0));
+
 
     }
 }

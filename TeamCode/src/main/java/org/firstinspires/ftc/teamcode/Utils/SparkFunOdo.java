@@ -5,12 +5,12 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.opencv.core.Mat;
 
 
 public class SparkFunOdo {
-    // Create an instance of the sensor
-    SparkFunOTOS myOtos;
 
+    SparkFunOTOS myOtos;
 
     public SparkFunOdo(HardwareMap map, SparkFunOTOS.Pose2D offset, SparkFunOTOS.Pose2D startingPos) {
         myOtos = map.get(SparkFunOTOS.class, "sensor_otos");
@@ -29,9 +29,7 @@ public class SparkFunOdo {
         myOtos.calibrateImu();
     }
 
-
     private void configureOtos(SparkFunOTOS.Pose2D offset, SparkFunOTOS.Pose2D startingPos) {
-
 
         myOtos.setLinearUnit(DistanceUnit.INCH);
         myOtos.setAngularUnit(AngleUnit.DEGREES);
@@ -39,8 +37,8 @@ public class SparkFunOdo {
         myOtos.setOffset(offset);
 
         //needs tuning
-        myOtos.setLinearScalar(1.0);
-        myOtos.setAngularScalar(1.0);
+        myOtos.setLinearScalar(1.0409);
+        myOtos.setAngularScalar(0.9606);
 
         myOtos.calibrateImu();
         myOtos.resetTracking();
@@ -51,6 +49,5 @@ public class SparkFunOdo {
         SparkFunOTOS.Version hwVersion = new SparkFunOTOS.Version();
         SparkFunOTOS.Version fwVersion = new SparkFunOTOS.Version();
         myOtos.getVersionInfo(hwVersion, fwVersion);
-
     }
 }
