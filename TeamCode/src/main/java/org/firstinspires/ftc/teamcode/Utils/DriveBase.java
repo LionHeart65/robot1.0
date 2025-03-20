@@ -23,43 +23,20 @@ public class DriveBase {
         this.gpad = gpad;
     }
 
-    public void moveAbs() {
-        double rotate = gpad.right_stick_x;
-        double realRobotHeading = odo.getPos().h;
-        double yStick = -gpad.left_stick_y;
-        double stickHeading = Math.atan2(yStick, gpad.left_stick_x);
-        double stickHeadingDegree = Math.toDegrees(stickHeading);
-        double sendRobotHeading = stickHeadingDegree - 45;
-        sendRobotHeading -= realRobotHeading;
-        double sendRobotHeadingRads = Math.toRadians(sendRobotHeading);
-        double speed = Math.hypot(yStick, gpad.left_stick_x);
-        double rightFrontPower = Math.sin(sendRobotHeadingRads) * speed;
-        double leftBackPower = Math.sin(sendRobotHeadingRads) * speed;
-        double leftFrontPower = Math.cos(sendRobotHeadingRads) * speed;
-        double rightBackPower = Math.cos(sendRobotHeadingRads) * speed;
 
-        this.setMotors(leftFrontPower + rotate, leftBackPower + rotate, rightFrontPower - rotate, rightBackPower - rotate);
+    public void moveAbs(double x, double y, double heading){
+        double angle = odo.getPos().h;
+        double x_rotated = x * Math.cos(angle) - y * Math.sin(angle);
+        double y_rotated = x * Math.sin(angle) + y * Math.cos(angle);
+        mecanumDrive(1.4 * x_rotated, y_rotated, heading);
     }
 
-
-    public void mecanumDrive() {
-        double y_stick = -gpad.right_stick_y;
-
-        double heading = Math.atan2(y_stick, gpad.right_stick_x);
-        double speed = Math.hypot(gpad.right_stick_x, y_stick);
-
-        double robot_heading = heading - Math.PI/4;
-
-        double rightFrontPower = Math.sin(robot_heading) * speed;
-        double leftBackPower = Math.sin(robot_heading) * speed;
-
-        double leftFrontPower = Math.cos(robot_heading) * speed;
-        double rightBackPower = Math.cos(robot_heading) * speed;
-
-        this.setMotors(leftFrontPower, leftBackPower, rightFrontPower, rightBackPower);
-        if (gpad.left_stick_x != 0) {
-            this.turn(gpad.left_stick_x);
-        }
+    private void mecanumDrive(double x, double y, double heading){
+        //moves relative to robot starting position
+        frontLeft.setPower(-(-x + y - heading));
+        backLeft.setPower((-x - y + heading));
+        frontRight.setPower((-x - y - heading));
+        backRight.setPower(-(-x + y + heading));
     }
 
     private void setMotors(double frontLeft, double backLeft, double frontRight, double backRight) {

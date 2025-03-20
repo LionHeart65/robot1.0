@@ -18,7 +18,6 @@ public class Teleop extends LinearOpMode {
     SparkFunOdo odo;
     Intake intake;
 
-    DcMotor intakeMotor;
     @Override
     public void runOpMode() {
         initialize();
@@ -28,12 +27,12 @@ public class Teleop extends LinearOpMode {
         if (opModeIsActive()) {
             while (opModeIsActive()) {
                 update();
-                if (gamepad1.a) {
-                    intake.reverse();
-                }
-                if (gamepad1.b) {
-                    intake.stopStart();
-                }
+//                if (gamepad1.a) {
+//                    intake.reverse();
+//                }
+//                if (gamepad1.b) {
+//                    intake.stopStart();
+//                }
                 telemetry.update();
             }
         }
@@ -43,16 +42,15 @@ public class Teleop extends LinearOpMode {
         robot = new Robot(hardwareMap);
         drive = new DriveBase(robot, gamepad1);
         odo = robot.odo;
-        intake = new Intake(robot);
-        intakeMotor = robot.intakeMotor;
+//        intake = new Intake(robot);
     }
 
     public void update() {
-        drive.moveAbs();
+        drive.moveAbs(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
         SparkFunOTOS.Pose2D pos = odo.getPos();
         telemetry.addData("X: ", pos.x);
         telemetry.addData("Y: ", pos.y);
         telemetry.addData("Heading: ", pos.h);
-        intake.update();
+//        intake.update();
     }
 }
