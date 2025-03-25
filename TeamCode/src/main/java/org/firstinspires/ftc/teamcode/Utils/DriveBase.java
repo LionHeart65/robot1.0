@@ -8,9 +8,11 @@ public class DriveBase {
 
     private DcMotor frontLeft, frontRight, backLeft, backRight;
     private Gamepad gpad;
-    private SparkFunOdo odo;
+//    private SparkFunOdo odo;
 
     private Edith edith = new Edith();
+
+    public double sensitivity = 1;
 
 
     public DriveBase(Robot r, Gamepad gpad) {
@@ -19,24 +21,24 @@ public class DriveBase {
         backLeft = r.backLeft;
         backRight = r.backRight;
 
-        odo = r.odo;
+//        odo = r.odo;
         this.gpad = gpad;
     }
 
 
-    public void moveAbs(double x, double y, double heading){
-        double angle = odo.getPos().h;
-        double x_rotated = x * Math.cos(angle) - y * Math.sin(angle);
-        double y_rotated = x * Math.sin(angle) + y * Math.cos(angle);
-        mecanumDrive(1.4 * x_rotated, y_rotated, heading);
-    }
+//    public void moveAbs(double x, double y, double heading){
+//        double angle = odo.getPos().h;
+//        double x_rotated = x * Math.cos(angle) - y * Math.sin(angle);
+//        double y_rotated = x * Math.sin(angle) + y * Math.cos(angle);
+//        mecanumDrive(1.4 * x_rotated, y_rotated, heading);
+//    }
 
-    private void mecanumDrive(double x, double y, double heading){
+    public void mecanumDrive(double x, double y, double heading){
         //moves relative to robot starting position
-        frontLeft.setPower(-(-x + y - heading));
-        backLeft.setPower((-x - y + heading));
-        frontRight.setPower((-x - y - heading));
-        backRight.setPower(-(-x + y + heading));
+        frontLeft.setPower((-(-x + y - heading)) * sensitivity);
+        backLeft.setPower((-x - y + heading) * sensitivity);
+        frontRight.setPower((-x - y - heading) * sensitivity);
+        backRight.setPower((-(-x + y + heading)) * sensitivity);
     }
 
     private void setMotors(double frontLeft, double backLeft, double frontRight, double backRight) {
@@ -51,4 +53,7 @@ public class DriveBase {
     }
 
 
+    public void setSensitivity(double sensitivity) {
+        this.sensitivity = sensitivity;
+    }
 }

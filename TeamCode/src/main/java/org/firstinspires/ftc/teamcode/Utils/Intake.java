@@ -6,7 +6,7 @@ public class Intake {
 
     private final DcMotor motor;
 
-    private boolean running;
+    public boolean running;
 
     private int direction = 1;
     public Intake(Robot r) {
@@ -16,6 +16,8 @@ public class Intake {
     public void update() {
         if (running) {
             motor.setPower(direction);
+        } else {
+            motor.setPower(0);
         }
     }
     public void reverse() {

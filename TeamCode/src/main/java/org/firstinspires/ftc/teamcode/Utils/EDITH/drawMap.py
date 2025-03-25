@@ -1,0 +1,51 @@
+import pygame
+import math
+import random
+
+colors = [(255, 0, 0), (255, 255, 0), (0, 0, 255)]
+red = False
+
+pygame.init()
+running = True
+while running:
+    samples = []
+    for i in range(50):
+        samples.append([random.randint(-1,1), random.randint(0, 1024 - 32), random.randint(0, 1024 - 32)])
+    def getValue(samples, x, y, red):#samples is an array of int[]s that is formated as {type(0 yellow, -1 blue, 1 red), x coord, y coord}
+        output = 0
+        multiplier = -1
+        for i in range(len(samples)):
+            if (samples[i][1] == x and samples[i][2] == y):
+                output += 20 * (samples[i][0] * multiplier)
+                if (samples[i][0] == 0):
+                    output += 30
+                continue
+            #if samples[i][0] != 0:
+             #   output += 1 / (samples[i][0] * multiplier * math.hypot(samples[i][1] - x, samples[i][2] - y))
+            if (math.hypot(samples[i][1] - x, samples[i][2] - y) <= 128):
+                output -= 1
+                if samples[i][0] == -multiplier:
+                    output -= 5
+            #if (samples[i][0] == 0):
+             #   output += (2 / math.hypot(samples[i][1] - x, samples[i][2] - y))
+        return output
+    bestScore = -1000000000
+    best = samples[0]
+    for i in range(len(samples)):
+        score = getValue(samples, samples[i][1], samples[i][2], red)
+        if (score > bestScore):
+            bestScore = score
+            best = samples[i]
+    scr = pygame.display.set_mode(((1024, 1024)))
+    for sample in samples:
+        pygame.draw.rect(scr, colors[sample[0] + 1], pygame.Rect(sample[1], sample[2], 32, 32))
+    pygame.draw.rect(scr, (0, 255, 0), pygame.Rect(best[1] + 8, best[2] + 8, 16, 16))
+    pygame.display.flip()
+    on = True
+    while on:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+                on == False
+            if event.type == pygame.KEYUP:
+                on = False
