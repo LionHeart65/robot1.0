@@ -91,9 +91,7 @@ public class Teleop extends LinearOpMode {
 
     public void update() {
         drive.moveAbs(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
-//        drive.mecanumDrive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
         SparkFunOTOS.Pose2D pos = odo.getPos();
-        telemetry.addData("Odo: ", odo);
         telemetry.addData("X: ", pos.x);
         telemetry.addData("Y: ", pos.y);
         telemetry.addData("Heading: ", pos.h);

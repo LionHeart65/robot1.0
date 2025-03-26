@@ -32,7 +32,8 @@ public class SparkFunOdo {
     private void configureOtos(SparkFunOTOS.Pose2D offset, SparkFunOTOS.Pose2D startingPos) {
 
         myOtos.setLinearUnit(DistanceUnit.INCH);
-        myOtos.setAngularUnit(AngleUnit.DEGREES);
+        myOtos.setAngularUnit(AngleUnit.RADIANS);
+
 
         myOtos.setOffset(offset);
 
