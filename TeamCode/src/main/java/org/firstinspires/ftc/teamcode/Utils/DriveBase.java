@@ -8,7 +8,7 @@ public class DriveBase {
 
     private DcMotor frontLeft, frontRight, backLeft, backRight;
     private Gamepad gpad;
-//    private SparkFunOdo odo;
+    private SparkFunOdo odo;
 
     private Edith edith = new Edith();
 
@@ -21,17 +21,17 @@ public class DriveBase {
         backLeft = r.backLeft;
         backRight = r.backRight;
 
-//        odo = r.odo;
+        odo = r.odo;
         this.gpad = gpad;
     }
 
 
-//    public void moveAbs(double x, double y, double heading){
-//        double angle = odo.getPos().h;
-//        double x_rotated = x * Math.cos(angle) - y * Math.sin(angle);
-//        double y_rotated = x * Math.sin(angle) + y * Math.cos(angle);
-//        mecanumDrive(1.4 * x_rotated, y_rotated, heading);
-//    }
+    public void moveAbs(double x, double y, double heading){
+        double angle = odo.getPos().h;
+        double x_rotated = x * Math.cos(angle) - y * Math.sin(angle);
+        double y_rotated = x * Math.sin(angle) + y * Math.cos(angle);
+        mecanumDrive(1.4 * x_rotated, y_rotated, heading);
+    }
 
     public void mecanumDrive(double x, double y, double heading){
         //moves relative to robot starting position

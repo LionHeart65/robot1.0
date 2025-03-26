@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Utils.DriveBase;
 import org.firstinspires.ftc.teamcode.Utils.Intake;
@@ -17,9 +17,10 @@ public class Teleop extends LinearOpMode {
     DriveBase drive;
     SparkFunOdo odo;
     Intake intake;
+    Servo gate;
 
-
-    boolean stopStart, reverse, sensSwitch;
+    double gateTarget = 0;
+    boolean stopStartSwitch, reverseSwitch, sensSwitch;
 
     @Override
     public void runOpMode() {
@@ -30,16 +31,19 @@ public class Teleop extends LinearOpMode {
         if (opModeIsActive()) {
             while (opModeIsActive()) {
                 update();
+
+                //A: Reverses spin
                 if (gamepad1.a) {
-                    if (!reverse) {
+                    if (!reverseSwitch) {
                         intake.reverse();
-                        reverse = true;
+                        reverseSwitch = true;
                     }
 
                 } else {
-                    reverse = false;
+                    reverseSwitch = false;
                 }
 
+                //Left Bumper: toggles sensitivity
                 if (gamepad1.left_bumper) {
                     if (!sensSwitch) {
                         sensSwitch = true;
@@ -52,18 +56,25 @@ public class Teleop extends LinearOpMode {
                 } else {
                     sensSwitch = false;
                 }
+
+                //B: turns intake on/off
                 if (gamepad1.b) {
-                    if (!stopStart) {
-                        stopStart = true;
+                    if (!stopStartSwitch) {
+                        stopStartSwitch = true;
                         intake.stopStart();
-                        telemetry.addData("B: ", intake.running);
                     }
                 } else {
-                    stopStart = false;
+                    stopStartSwitch = false;
                 }
 
+                if (gamepad1.x) {
+                    gateTarget = (0);
+                }
+                if (gamepad1.y) {
+                    gateTarget = (0.3);
+                }
 
-                telemetry.addData("All: ", intake.running);
+                gate.setPosition(gateTarget);
                 telemetry.update();
             }
         }
@@ -74,17 +85,20 @@ public class Teleop extends LinearOpMode {
         drive = new DriveBase(robot, gamepad1);
         odo = robot.odo;
         intake = new Intake(robot);
+
+        gate = hardwareMap.servo.get("servoGate");
     }
 
     public void update() {
-//        drive.moveAbs(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
-        drive.mecanumDrive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
+        drive.moveAbs(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
+//        drive.mecanumDrive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
         SparkFunOTOS.Pose2D pos = odo.getPos();
         telemetry.addData("Odo: ", odo);
         telemetry.addData("X: ", pos.x);
         telemetry.addData("Y: ", pos.y);
         telemetry.addData("Heading: ", pos.h);
         telemetry.addData("Sensitivty: ", drive.sensitivity);
+        telemetry.addData("Gate Pos", gate.getPosition());
         intake.update();
     }
 }

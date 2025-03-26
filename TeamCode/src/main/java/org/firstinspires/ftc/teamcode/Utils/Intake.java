@@ -17,7 +17,7 @@ public class Intake {
         if (running) {
             motor.setPower(direction);
         } else {
-            motor.setPower(0);
+            motor.setPower(0.7);
         }
     }
     public void reverse() {
