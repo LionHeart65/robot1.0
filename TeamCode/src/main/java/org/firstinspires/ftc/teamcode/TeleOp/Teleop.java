@@ -20,7 +20,9 @@ public class Teleop extends LinearOpMode {
     Servo gate;
 
     double gateTarget = 0;
-    boolean stopStartSwitch, reverseSwitch, sensSwitch;
+    double open = 0;
+    double closed = 0.3;
+    boolean stopStartSwitch, reverseSwitch, sensSwitch, dDown, dUp;
 
     @Override
     public void runOpMode() {
@@ -66,12 +68,27 @@ public class Teleop extends LinearOpMode {
                 } else {
                     stopStartSwitch = false;
                 }
+                if (gamepad1.dpad_down && closed > 0.05 && !dDown) {
+                    closed -= 0.05;
+                    dDown = true;
+                }
+                if (!gamepad1.dpad_down) {
+                    dDown = false;
+                }
+                telemetry.addData("d-up/dn", dUp+","+dDown);
+                if (gamepad1.dpad_up && closed < 0.35 && !dUp) {
+                    closed += 0.05;
+                    dUp = true;
+                }
+                if (!gamepad1.dpad_up) {
+                    dUp = false;
+                }
 
                 if (gamepad1.x) {
-                    gateTarget = (0);
+                    gateTarget = (open);
                 }
                 if (gamepad1.y) {
-                    gateTarget = (0.3);
+                    gateTarget = (closed);
                 }
 
                 gate.setPosition(gateTarget);
@@ -92,11 +109,15 @@ public class Teleop extends LinearOpMode {
     public void update() {
         drive.moveAbs(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
         SparkFunOTOS.Pose2D pos = odo.getPos();
+        telemetry.addData("D-Pad Up/Dn - change servo closed pos.", "X: open gate, Y: close gate");
+        telemetry.addData("B: start/stop intake, A: reverse intake", "left bumper: sensitivity toggle");
+
         telemetry.addData("X: ", pos.x);
         telemetry.addData("Y: ", pos.y);
         telemetry.addData("Heading: ", pos.h);
-        telemetry.addData("Sensitivty: ", drive.sensitivity);
+        telemetry.addData("Sensitivity: ", drive.sensitivity);
         telemetry.addData("Gate Pos", gate.getPosition());
+        telemetry.addData("Closed Position", closed);
         intake.update();
     }
 }
