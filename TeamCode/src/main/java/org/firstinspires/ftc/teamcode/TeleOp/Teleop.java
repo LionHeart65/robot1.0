@@ -22,7 +22,7 @@ public class Teleop extends LinearOpMode {
     double gateTarget = 0;
     double open = 0;
     double closed = 0.3;
-    boolean stopStartSwitch, reverseSwitch, sensSwitch, dDown, dUp;
+    boolean reverseSwitch, sensSwitch, reset;
 
     @Override
     public void runOpMode() {
@@ -59,39 +59,16 @@ public class Teleop extends LinearOpMode {
                     sensSwitch = false;
                 }
 
-                //B: turns intake on/off
-                if (gamepad1.b) {
-                    if (!stopStartSwitch) {
-                        stopStartSwitch = true;
-                        intake.stopStart();
+
+                if (gamepad1.back) {
+                    if (!reset) {
+                        reset = true;
+                        odo.reset();
                     }
                 } else {
-                    stopStartSwitch = false;
-                }
-                if (gamepad1.dpad_down && closed > 0.05 && !dDown) {
-                    closed -= 0.05;
-                    dDown = true;
-                }
-                if (!gamepad1.dpad_down) {
-                    dDown = false;
-                }
-                telemetry.addData("d-up/dn", dUp+","+dDown);
-                if (gamepad1.dpad_up && closed < 0.35 && !dUp) {
-                    closed += 0.05;
-                    dUp = true;
-                }
-                if (!gamepad1.dpad_up) {
-                    dUp = false;
+                    reset = false;
                 }
 
-                if (gamepad1.x) {
-                    gateTarget = (open);
-                }
-                if (gamepad1.y) {
-                    gateTarget = (closed);
-                }
-
-                gate.setPosition(gateTarget);
                 telemetry.update();
             }
         }
@@ -109,15 +86,13 @@ public class Teleop extends LinearOpMode {
     public void update() {
         drive.moveAbs(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
         SparkFunOTOS.Pose2D pos = odo.getPos();
-        telemetry.addData("D-Pad Up/Dn - change servo closed pos.", "X: open gate, Y: close gate");
-        telemetry.addData("B: start/stop intake, A: reverse intake", "left bumper: sensitivity toggle");
+        telemetry.addData("A: reverse intake", "left bumper: sensitivity toggle, Back: Resets fieldcentric");
 
         telemetry.addData("X: ", pos.x);
         telemetry.addData("Y: ", pos.y);
         telemetry.addData("Heading: ", pos.h);
         telemetry.addData("Sensitivity: ", drive.sensitivity);
-        telemetry.addData("Gate Pos", gate.getPosition());
-        telemetry.addData("Closed Position", closed);
+        telemetry.addData("Direction: ", intake.getDirection());
         intake.update();
     }
 }

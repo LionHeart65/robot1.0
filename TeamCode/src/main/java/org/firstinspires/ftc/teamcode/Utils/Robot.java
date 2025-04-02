@@ -25,7 +25,7 @@ public class Robot {
 
         intakeMotor = hardwareMap.get(DcMotor.class, "intakeMotor");
 
-        odo = new SparkFunOdo(hardwareMap, new SparkFunOTOS.Pose2D(-6.49606,0,0), new SparkFunOTOS.Pose2D(0,0,0));
+        odo = new SparkFunOdo(hardwareMap, new SparkFunOTOS.Pose2D(-6.49606,0,0), new SparkFunOTOS.Pose2D(0,0,Math.PI));
 
 
     }

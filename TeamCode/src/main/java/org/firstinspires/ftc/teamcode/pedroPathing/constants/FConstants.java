@@ -9,7 +9,7 @@ public class FConstants {
     static {
 
         FollowerConstants.localizers = Localizers.OTOS;
-        FollowerConstants.mass = 3;
+        FollowerConstants.mass = 5;
 
         FollowerConstants.leftFrontMotorName = "frontLeft";
         FollowerConstants.leftRearMotorName = "backLeft";
