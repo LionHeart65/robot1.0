@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Utils;
 
 import androidx.annotation.NonNull;
 
+import com.pedropathing.localization.Pose;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -11,9 +12,10 @@ public class Robot {
     public final DcMotor frontLeft, backLeft, frontRight, backRight;
     public DcMotor intakeMotor;
 
+    public Pose startPos;
     public final SparkFunOdo odo;
 
-    public Robot(@NonNull HardwareMap hardwareMap) {
+    public Robot(@NonNull HardwareMap hardwareMap, Pose startPos) {
 
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
         backLeft = hardwareMap.get(DcMotor.class, "backLeft");
@@ -25,7 +27,7 @@ public class Robot {
 
         intakeMotor = hardwareMap.get(DcMotor.class, "intakeMotor");
 
-        odo = new SparkFunOdo(hardwareMap, new SparkFunOTOS.Pose2D(-6.49606,0,0), new SparkFunOTOS.Pose2D(0,0,Math.PI));
+        odo = new SparkFunOdo(hardwareMap, new SparkFunOTOS.Pose2D(-6.49606,0,0), new SparkFunOTOS.Pose2D(startPos.getX(), startPos.getY(), startPos.getHeading()));
 
 
     }

@@ -1,33 +1,33 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
+import com.pedropathing.localization.Pose;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Utils.DriveBase;
 import org.firstinspires.ftc.teamcode.Utils.Intake;
 import org.firstinspires.ftc.teamcode.Utils.Robot;
 import org.firstinspires.ftc.teamcode.Utils.SparkFunOdo;
 
-@TeleOp(name = "Teleop")
-public class Teleop extends LinearOpMode {
+@TeleOp(name = "Blue Teleop")
+public class BlueTeleop extends LinearOpMode {
 
     Robot robot;
     DriveBase drive;
     SparkFunOdo odo;
     Intake intake;
-    Servo gate;
 
-    double gateTarget = 0;
-    double open = 0;
-    double closed = 0.3;
+    private final Pose loadingZone = new Pose();
+    private final Pose destination = new Pose();
+    private final Pose circle = new Pose();
+
+
     boolean reverseSwitch, sensSwitch, reset;
 
     @Override
     public void runOpMode() {
         initialize();
-
         waitForStart();
 
         if (opModeIsActive()) {
@@ -44,7 +44,6 @@ public class Teleop extends LinearOpMode {
                 } else {
                     reverseSwitch = false;
                 }
-
                 //Left Bumper: toggles sensitivity
                 if (gamepad1.left_bumper) {
                     if (!sensSwitch) {
@@ -58,8 +57,7 @@ public class Teleop extends LinearOpMode {
                 } else {
                     sensSwitch = false;
                 }
-
-
+                //Back: reset field centric
                 if (gamepad1.back) {
                     if (!reset) {
                         reset = true;
@@ -68,19 +66,16 @@ public class Teleop extends LinearOpMode {
                 } else {
                     reset = false;
                 }
-
                 telemetry.update();
             }
         }
     }
 
     public void initialize() {
-        robot = new Robot(hardwareMap);
+        robot = new Robot(hardwareMap, new Pose(0,0, Math.PI/2));
         drive = new DriveBase(robot, gamepad1);
         odo = robot.odo;
         intake = new Intake(robot);
-
-        gate = hardwareMap.servo.get("servoGate");
     }
 
     public void update() {

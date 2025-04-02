@@ -4,10 +4,10 @@
     <selectionStates>
       <SelectionState runConfigName="TeamCode">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2025-02-14T17:32:11.940304800Z">
+        <DropdownSelection timestamp="2025-04-02T12:47:32.218815903Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\Noam - School\.android\avd\Pixel_4_API_30.avd" />
+              <DeviceId pluginId="Default" identifier="serial=192.168.43.1:5555;connection=5187333c" />
             </handle>
           </Target>
         </DropdownSelection>
