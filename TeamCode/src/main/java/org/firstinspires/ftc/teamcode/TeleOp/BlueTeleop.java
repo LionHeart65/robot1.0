@@ -4,6 +4,7 @@ import com.pedropathing.localization.Pose;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.Utils.DriveBase;
 import org.firstinspires.ftc.teamcode.Utils.Intake;
@@ -18,10 +19,11 @@ public class BlueTeleop extends LinearOpMode {
     SparkFunOdo odo;
     Intake intake;
 
-    private final Pose loadingZone = new Pose();
-    private final Pose destination = new Pose();
-    private final Pose circle = new Pose();
 
+    private final double heading = Math.PI/2;
+
+    Gamepad.RumbleEffect outtakeRumble;
+    Gamepad.RumbleEffect stopRumble;
 
     boolean reverseSwitch, sensSwitch, reset;
 
@@ -32,10 +34,16 @@ public class BlueTeleop extends LinearOpMode {
 
         if (opModeIsActive()) {
             while (opModeIsActive()) {
+
+                if (intake.getDirection().equals("Outtake")) {
+                    gamepad2.runRumbleEffect(outtakeRumble);
+                } else {
+                    gamepad2.runRumbleEffect(stopRumble);
+                }
                 update();
 
                 //A: Reverses spin
-                if (gamepad1.a) {
+                if (gamepad1.a || gamepad2.a) {
                     if (!reverseSwitch) {
                         intake.reverse();
                         reverseSwitch = true;
@@ -58,7 +66,7 @@ public class BlueTeleop extends LinearOpMode {
                     sensSwitch = false;
                 }
                 //Back: reset field centric
-                if (gamepad1.back) {
+                if (gamepad1.back || gamepad2.back) {
                     if (!reset) {
                         reset = true;
                         odo.reset();
@@ -72,10 +80,14 @@ public class BlueTeleop extends LinearOpMode {
     }
 
     public void initialize() {
-        robot = new Robot(hardwareMap, new Pose(0,0, Math.PI/2));
+        robot = new Robot(hardwareMap, new Pose(0,0, heading));
         drive = new DriveBase(robot, gamepad1);
         odo = robot.odo;
         intake = new Intake(robot);
+        outtakeRumble = new Gamepad.RumbleEffect.Builder()
+                .addStep(0.25, 0.25,100000).build();
+        stopRumble = new Gamepad.RumbleEffect.Builder().addStep(0,0,0).build();
+
     }
 
     public void update() {

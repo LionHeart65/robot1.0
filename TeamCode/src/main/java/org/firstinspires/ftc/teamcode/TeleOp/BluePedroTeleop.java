@@ -5,6 +5,8 @@ import com.pedropathing.localization.Pose;
 import com.pedropathing.pathgen.BezierCurve;
 import com.pedropathing.pathgen.BezierLine;
 import com.pedropathing.pathgen.Path;
+import com.pedropathing.pathgen.PathBuilder;
+import com.pedropathing.pathgen.PathChain;
 import com.pedropathing.pathgen.Point;
 import com.pedropathing.util.Constants;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
@@ -19,8 +21,8 @@ import org.firstinspires.ftc.teamcode.Utils.SparkFunOdo;
 import org.firstinspires.ftc.teamcode.pedroPathing.constants.FConstants;
 import org.firstinspires.ftc.teamcode.pedroPathing.constants.LConstants;
 
-@TeleOp(name = "Pedro Teleop")
-public class PedroTeleop extends LinearOpMode {
+@TeleOp(name = "Blue Pedro Teleop")
+public class BluePedroTeleop extends LinearOpMode {
 
     Robot robot;
     DriveBase drive;
@@ -33,10 +35,26 @@ public class PedroTeleop extends LinearOpMode {
     private final Pose destinationPass = new Pose(27.063,116.647,0);
     private final Pose loadingZonePass = new Pose(128.804, 30.971, 0);
 
+    private final Pose startPose = new Pose(135,33,Math.PI/2);
+
     private Follower follower;
 
     private Gamepad.RumbleEffect sos;
     private String actionState = "Outtake";
+
+    public static PathBuilder builder = new PathBuilder();
+
+    public static PathChain paths = builder
+            .addPath(
+                    // Line 1
+                    new BezierLine(
+                            new Point(136.764, 32.563, Point.CARTESIAN),
+                            new Point(136.040, 113.319, Point.CARTESIAN)
+                    )
+            )
+            .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0))
+            .build();
+
 
     boolean reverseSwitch, sensSwitch, reset, autoMove, stateSwitch;
     int pathState;
@@ -75,7 +93,7 @@ public class PedroTeleop extends LinearOpMode {
                 if (gamepad2.back) {
                     if (!reset) {
                         reset = true;
-                        odo.reset();
+//                        odo.reset();
                     }
                 } else {
                     reset = false;
@@ -130,7 +148,7 @@ public class PedroTeleop extends LinearOpMode {
 
 
 
-                //Gpad 1 B: destination move
+                //Gpad 1 B: No pass move
                 if (gamepad1.b) {
                     if (actionState.equals("Outtake")) {
                         setAutoMove(destination);
@@ -141,6 +159,10 @@ public class PedroTeleop extends LinearOpMode {
                     }
                 }
 
+                if (gamepad1.a) {
+                    follower.followPath(paths, false);
+                    autoMove = true;
+                }
                 if (autoMove) {
                     if (!follower.isBusy()) {
                         autoMove = false;
@@ -172,10 +194,7 @@ public class PedroTeleop extends LinearOpMode {
         path.setLinearHeadingInterpolation(odo.getPos().h, endPos.getHeading());
 
 
-
         follower.followPath(path);
-        telemetry.addLine("New Path");
-
         autoMove = true;
     }
 
@@ -187,12 +206,10 @@ public class PedroTeleop extends LinearOpMode {
         path.setLinearHeadingInterpolation(odo.getPos().h, endPos.getHeading());
 
         follower.followPath(path);
-
         autoMove = true;
-
     }
     public void initialize() {
-        robot = new Robot(hardwareMap, new Pose(9.2,33.2,-Math.PI/2));
+        robot = new Robot(hardwareMap, startPose);
         drive = new DriveBase(robot, gamepad1);
         odo = robot.odo;
         intake = new Intake(robot);
@@ -200,6 +217,7 @@ public class PedroTeleop extends LinearOpMode {
         Constants.setConstants(FConstants.class, LConstants.class);
         follower = new Follower(hardwareMap);
         follower.setStartingPose(robot.startPos);
+        follower.setStartingPose(startPose);
 
         sos = new Gamepad.RumbleEffect.Builder()
                 .addStep(1, 1, 100).addStep(1, 1, 100).addStep(1, 1, 100)
