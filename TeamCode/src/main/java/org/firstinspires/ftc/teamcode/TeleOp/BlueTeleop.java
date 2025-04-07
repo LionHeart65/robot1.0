@@ -4,6 +4,7 @@ import com.pedropathing.localization.Pose;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.Utils.DriveBase;
@@ -19,11 +20,8 @@ public class BlueTeleop extends LinearOpMode {
     SparkFunOdo odo;
     Intake intake;
 
-
-    private final double heading = Math.PI/2;
-
-    Gamepad.RumbleEffect outtakeRumble;
-    Gamepad.RumbleEffect stopRumble;
+    DigitalChannel LED;
+    private final double heading = 0;
 
     boolean reverseSwitch, sensSwitch, reset;
 
@@ -35,13 +33,13 @@ public class BlueTeleop extends LinearOpMode {
         if (opModeIsActive()) {
             while (opModeIsActive()) {
 
-                if (intake.getDirection().equals("Outtake")) {
-                    gamepad2.runRumbleEffect(outtakeRumble);
-                } else {
-                    gamepad2.runRumbleEffect(stopRumble);
-                }
                 update();
 
+                if (intake.getDirection().equals("Outtake")) {
+                    LED.setState(true);
+                } else {
+                    LED.setState(false);
+                }
                 //A: Reverses spin
                 if (gamepad1.a || gamepad2.a) {
                     if (!reverseSwitch) {
@@ -84,10 +82,8 @@ public class BlueTeleop extends LinearOpMode {
         drive = new DriveBase(robot, gamepad1);
         odo = robot.odo;
         intake = new Intake(robot);
-        outtakeRumble = new Gamepad.RumbleEffect.Builder()
-                .addStep(0.25, 0.25,100000).build();
-        stopRumble = new Gamepad.RumbleEffect.Builder().addStep(0,0,0).build();
 
+        this.LED = robot.LED;
     }
 
     public void update() {

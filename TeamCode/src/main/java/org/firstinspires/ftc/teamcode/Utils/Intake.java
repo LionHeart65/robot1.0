@@ -25,7 +25,7 @@ public class Intake {
         if (direction < 0) {
             return "Intake";
         } else {
-            return "Outake";
+            return "Outtake";
         }
     }
 
